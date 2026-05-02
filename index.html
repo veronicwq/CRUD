@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>CRUD Students</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="container">
+
+  <h1>Список студентів</h1>
+
+  <button id="get-students-btn">Отримати студентів</button>
+
+  <table id="students-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Ім'я</th>
+        <th>Вік</th>
+        <th>Курс</th>
+        <th>Навички</th>
+        <th>Email</th>
+        <th>Статус</th>
+        <th>Дії</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <h2>Додати студента</h2>
+
+  <form id="add-student-form">
+    <input id="name" placeholder="Ім'я" required>
+    <input id="age" type="number" placeholder="Вік" required>
+    <input id="course" placeholder="Курс" required>
+    <input id="skills" placeholder="Навички (через кому)" required>
+    <input id="email" type="email" placeholder="Email" required>
+    <label>
+      <input type="checkbox" id="isEnrolled"> Записаний
+    </label>
+
+    <button type="submit">Додати</button>
+  </form>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
