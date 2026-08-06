@@ -4,14 +4,24 @@ const tableBody = document.querySelector("#students-table tbody");
 const getBtn = document.getElementById("get-students-btn");
 const form = document.getElementById("add-student-form");
 
-
+// Отримати студентів
 async function getStudents() {
-  const res = await fetch(API_URL);
-  const data = await res.json();
-  renderStudents(data);
+  try {
+    const res = await fetch(API_URL);
+
+    if (!res.ok) {
+      throw new Error("Не вдалося отримати список студентів");
+    }
+
+    const data = await res.json();
+    renderStudents(data);
+  } catch (error) {
+    console.error("Помилка:", error);
+    alert("Помилка при завантаженні студентів");
+  }
 }
 
-
+// Відображення студентів
 function renderStudents(students) {
   tableBody.innerHTML = "";
 
@@ -36,55 +46,87 @@ function renderStudents(students) {
   });
 }
 
-
+// Додати студента
 async function addStudent(e) {
   e.preventDefault();
 
-  const student = {
-    name: name.value,
-    age: Number(age.value),
-    course: course.value,
-    skills: skills.value.split(",").map((s) => s.trim()),
-    email: email.value,
-    isEnrolled: isEnrolled.checked,
-  };
+  try {
+    const student = {
+      name: name.value,
+      age: Number(age.value),
+      course: course.value,
+      skills: skills.value.split(",").map((s) => s.trim()),
+      email: email.value,
+      isEnrolled: isEnrolled.checked,
+    };
 
-  await fetch(API_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(student),
-  });
+    const res = await fetch(API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(student),
+    });
 
-  form.reset();
-  getStudents();
+    if (!res.ok) {
+      throw new Error("Не вдалося додати студента");
+    }
+
+    form.reset();
+    getStudents();
+  } catch (error) {
+    console.error("Помилка:", error);
+    alert("Помилка при додаванні студента");
+  }
 }
 
+// Оновити студента
 async function updateStudent(id) {
   const newName = prompt("Нове ім'я:");
 
   if (!newName) return;
 
-  await fetch(`${API_URL}/${id}`, {
-    method: "PATCH",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ name: newName }),
-  });
+  try {
+    const res = await fetch(`${API_URL}/${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name: newName }),
+    });
 
-  getStudents();
+    if (!res.ok) {
+      throw new Error("Не вдалося оновити студента");
+    }
+
+    getStudents();
+  } catch (error) {
+    console.error("Помилка:", error);
+    alert("Помилка при оновленні студента");
+  }
 }
 
-
+// Видалити студента
 async function deleteStudent(id) {
-  await fetch(`${API_URL}/${id}`, {
-    method: "DELETE",
-  });
+  try {
+    const res = await fetch(`${API_URL}/${id}`, {
+      method: "DELETE",
+    });
 
-  getStudents();
+    if (!res.ok) {
+      throw new Error("Не вдалося видалити студента");
+    }
+
+    getStudents();
+  } catch (error) {
+    console.error("Помилка:", error);
+    alert("Помилка при видаленні студента");
+  }
 }
 
-
+// Події
 getBtn.addEventListener("click", getStudents);
 form.addEventListener("submit", addStudent);
 
-
+// Завантажити список при відкритті сторінки
 getStudents();
